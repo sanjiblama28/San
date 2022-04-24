@@ -8,11 +8,11 @@ project(project1)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  message_generation
   roscpp
   rospy
   sensor_msgs
   std_msgs
+  message_generation
 )
 
 ## System dependencies are found with CMake's conventions
@@ -61,6 +61,10 @@ find_package(catkin REQUIRED COMPONENTS
 #   Service1.srv
 #   Service2.srv
 # )
+add_service_files(
+  FILES
+  WeatherStatusCheck.srv
+)
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -72,9 +76,13 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate added messages and services with any dependencies listed here
 # generate_messages(
 #   DEPENDENCIES
-#   sensor_msgs#   std_msgs
+#   std_msgs  # Or other packages containing msgs
 # )
-
+generate_messages(
+  DEPENDENCIES
+  sensor_msgs
+  std_msgs
+)
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
 ################################################
@@ -106,8 +114,8 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES project1
-#  CATKIN_DEPENDS message_generation roscpp rospy sensor_msgs std_msgs
+#  LIBRARIES project5
+#  CATKIN_DEPENDS roscpp
 #  DEPENDS system_lib
 )
 
@@ -124,7 +132,7 @@ include_directories(
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/project1.cpp
+#   src/${PROJECT_NAME}/project5.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -135,7 +143,7 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/project1_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/project5_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -157,6 +165,15 @@ target_link_libraries(speed_calc ${catkin_LIBRARIES})
 
 add_executable(rpm_sub src/rpm_sub.cpp)
 target_link_libraries(rpm_sub ${catkin_LIBRARIES})
+
+add_executable(service_server src/service_server.cpp)
+target_link_libraries(service_server ${catkin_LIBRARIES})
+add_dependencies(service_server project1_generate_messages_cpp)
+
+add_executable(service_client src/service_client.cpp)
+target_link_libraries(service_client ${catkin_LIBRARIES})
+add_dependencies(service_client project1_generate_messages_cpp)
+
 
 #############
 ## Install ##
@@ -205,7 +222,7 @@ target_link_libraries(rpm_sub ${catkin_LIBRARIES})
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_project1.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_project5.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()

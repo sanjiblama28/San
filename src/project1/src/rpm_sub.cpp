@@ -22,9 +22,7 @@ void subCallback(const std_msgs::Float32::Ptr& rpm)
       std_msgs::Float32 speed_msg;
 
       // Speed = Circumference * Rev/s
-      Speed = speed_msg.data = (2 * WHEEL_RADIUS * 3.14159) * (rpm->data / 60); 
-
-      speed_calc.subscribe(speed_msg);
+      Speed = speed_msg.data = (2 * WHEEL_RADIUS * 3.14159) * (rpm->data / 60);
 
       std_msgs::Float32 msg;
 
